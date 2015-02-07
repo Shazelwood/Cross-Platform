@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +25,8 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     ParseUser user;
+    Record_Adapter record_adapter;
+    ArrayList<Record> records;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +37,19 @@ public class MainActivity extends ActionBarActivity {
 
         ParseLoginBuilder builder = new ParseLoginBuilder(MainActivity.this);
         startActivityForResult(builder.build(), 0);
+
+
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Record");
         final ListView listView = (ListView) findViewById(R.id.list);
-        final ArrayList<Record> records = new ArrayList<Record>();
-        final Record_Adapter record_adapter = new Record_Adapter(this, records);
+        records = new ArrayList<Record>();
+        record_adapter = new Record_Adapter(this, records);
         final ArrayList recordIDs = new ArrayList<>();
 
         query.whereEqualTo("user", ParseUser.getCurrentUser());
@@ -85,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
                                 post.getFirstInBackground(new GetCallback<ParseObject>() {
                                     @Override
                                     public void done(ParseObject parseObject, ParseException e) {
-                                        parseObject.deleteInBackground();
+                                        parseObject.deleteEventually();
                                     }
                                 });
 
@@ -107,9 +112,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("BOOM", ParseUser.getCurrentUser().getUsername());
-        user = ParseUser.getCurrentUser();
-
+        records.clear();
+        record_adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -126,13 +130,16 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()){
             case R.id.action_sign_out:
                 ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                records.clear();
+                record_adapter = new Record_Adapter(this, records);
+                record_adapter.notifyDataSetChanged();
                 ParseLoginBuilder builder = new ParseLoginBuilder(MainActivity.this);
                 startActivityForResult(builder.build(), 0);
 
                 return true;
             case R.id.action_post:
                 Intent form = new Intent(this, Record_Form.class);
-                form.putExtra("user", user.getEmail());
                 startActivity(form);
                 return true;
         }
