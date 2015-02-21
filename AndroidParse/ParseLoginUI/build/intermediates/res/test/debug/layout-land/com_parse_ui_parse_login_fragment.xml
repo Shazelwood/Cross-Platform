@@ -25,4 +25,4 @@
         <include layout="@layout/com_parse_ui_parse_login_third_party_section" />
     </LinearLayout>
 </LinearLayout>
-<!-- From: file:/Users/Hazelwood/Desktop/AndroidParse/ParseLoginUI/res/layout-land/com_parse_ui_parse_login_fragment.xml --><!-- From: file:/Users/Hazelwood/Desktop/AndroidParse/ParseLoginUI/build/intermediates/bundles/debug/res/layout-land/com_parse_ui_parse_login_fragment.xml -->
+<!-- From: file:/Users/Hazelwood/Desktop/Cross-Platform/AndroidParse/ParseLoginUI/res/layout-land/com_parse_ui_parse_login_fragment.xml --><!-- From: file:/Users/Hazelwood/Desktop/Cross-Platform/AndroidParse/ParseLoginUI/build/intermediates/bundles/debug/res/layout-land/com_parse_ui_parse_login_fragment.xml -->
